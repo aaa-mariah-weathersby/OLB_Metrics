@@ -1,0 +1,29 @@
+{
+  apps: [
+    {
+      env: {
+        COMMON_VARIABLE: "true",
+        NODE_ENV: "production",
+        PORT: 5000,
+        NEW_RELIC_APP_NAME: "ENT.WEB.NODE.SAMPLE",
+        NEW_RELIC_LICENSE_KEY: "64f0f0c6f7fc363ec98a02bb548d1c3f1c33298d",
+        NEW_RELIC_NO_CONFIG_FILE: true
+      },
+      name: "sample",
+      script: "server.js"
+    }
+  ],
+  deploy: {
+    sample: {
+      user: "root",
+      host: "10.14.254.21",
+      ref: "origin/acceptance",
+      repo: "git@github.com:clublabs/app.git",
+      path: "/data/www/app",
+      "post-deploy": "npm install && pm2 startOrRestart ecosystem.acceptance.json --env acceptance",
+      env: {
+        NODE_ENV: "production"
+      }
+    }
+  }
+}
