@@ -4,9 +4,6 @@ import transform_datetime_refactored as transform_datetime
 
 """
 to run:
-    python -m unittest transform_datetime_refactored_unittest.py
-
-or:
 
     python transform_datetime_refactored_unittest.py
 
@@ -16,18 +13,18 @@ class TestQuoteTransform(unittest.TestCase):
 
     def test_open_filehandles(self):
         quotetransform = transform_datetime.QuoteTransform()
-        self.assertIsNone(quotetransform.INPUTFILE)
-        self.assertIsNone(quotetransform.OUTPUTFILE)
+        self.assertIsNone(quotetransform.input_file)
+        self.assertIsNone(quotetransform.output_file)
         quotetransform.open_filehandles()
-        self.assertIsNotNone(quotetransform.INPUTFILE)
-        self.assertIsNotNone(quotetransform.OUTPUTFILE)
+        self.assertIsNotNone(quotetransform.input_file)
+        self.assertIsNotNone(quotetransform.output_file)
 
     def test_close_filehandles(self):
         quotetransform = transform_datetime.QuoteTransform()
         quotetransform.open_filehandles()
         quotetransform.close_filehandles()
-        self.assertIsNone(quotetransform.INPUTFILE)
-        self.assertIsNone(quotetransform.OUTPUTFILE)
+        self.assertIsNone(quotetransform.input_file)
+        self.assertIsNone(quotetransform.output_file)
 
     def test_construct_header(self):
         quotetransform = transform_datetime.QuoteTransform()
@@ -106,4 +103,7 @@ class TestQuoteTransform(unittest.TestCase):
         )
 
 if __name__ == '__main__':
+    from pylint.lint import Run
+    from pylint.reporters.text import TextReporter
+    Run(['transform_datetime_refactored.py'], exit=False)
     unittest.main()
