@@ -26,13 +26,30 @@ Terminal configuration that will run the `transferscript.bzs` script.
 Terminal script that does the following:
   * run the JCL job
   * download quote file
-* `transform_datetime.py`
-Python script that transforms the file to expected format
+* `transform_datetime_refactored.py`, `transform_datetime_refactored_unittest.py`
+Python script that transforms the file to expected format, with unittest
 
 ## Usage
+
+### Database Drop
 
 Run the script on the command line as so:
 
 ```
 C:\tools> transfer2.bat
+```
+
+### transform
+
+Edit the `transform_datetime_refactored.py` and change the following if necessary:
+
+* `INPUT_FILENAME` - input file from database drop, "transfertest77.txt"
+* `OUTPUT_FILENAME` - output file, "testDoc.txt"
+
+#### unittest/pylint
+
+Run the following:
+
+```
+python transform_datetime_refactored_unittest.py
 ```

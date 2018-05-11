@@ -26,6 +26,14 @@ class QuoteTransform:
         self.input_file = None
         self.output_file = None
 
+    def __del__(self):
+        if self.input_file is not None:
+            self.input_file.close()
+            self.input_file = None
+        if self.output_file is not None:
+            self.output_file.close()
+            self.output_file = None
+
     def open_filehandles(self):
         """Opens filehandles from values INPUT_FILENAME and OUTPUT_FILENAME"""
         self.input_file = open(self.INPUT_FILENAME)
