@@ -3,9 +3,16 @@ import unittest
 import json
 import csv
 
+import mysqlConnect
+
 MOCK_QUOTE_DB_ROW = ('quote_id', 'created_date', 'type')
 MOCK_INPUT_DATA = open('mock_formatted_data.txt')
 MOCK_QUOTE = open('demo-quote.txt', 'r')
+
+MySQL_Quotes = mysqlConnect.MySQL_Quotes()
+File_Parser = mysqlConnect.File_Parser()
+
+MOCK_DATA = 'test-data.txt'
 
 class MySQLDataInjection(unittest.TestCase):
     print('Coverage Summary:')
@@ -19,35 +26,26 @@ class MySQLDataInjection(unittest.TestCase):
         to end
         '''
 
-    def test_mysql_data_format(self):
+    def test_parse_file(self):
+        print("Parse file into list")
+        
+        expectedData = [('000000000999501123', '11/04/2016', 'Gold')]
+        expected_data_type = type(expectedData)
 
-        data = MOCK_INPUT_DATA.readlines()
-        data = data[0]
+        returned_data = File_Parser.parse_file(MOCK_DATA)
+        returned_data_type = type(returned_data)
 
-        data_dict = None
-        quote_list = []
+        self.assertEqual(expected_data_type, returned_data_type)
 
-        with open('demo-quote.txt', 'r') as f:
-            data_dict = json.load(f)
 
-        dict_root = data_dict['Quotes']
+    # def test_create_list_gold(self):
+        # print("Expect to pass in object with __ properties and return list of tuples")
+        # expectedData = [('000000000999501123', '11/04/2016', 'Gold')]
+        # self.assertEqual(MySQL_Quotes.create_list(MOCK_DATA), expectedData)
 
-        print(data_dict.keys())
 
-        for quote in dict_root:
-            quote_id = quote['QuoteId']
-            quote_date = quote['EffectiveDate']
-            quote_type = "Gold"
-            
-            if 'Message' in quote.keys():
-                quote_type = quote['Message']
-
-            quote_tup = (quote_id, quote_date, quote_type)
-            quote_list.append(quote_tup)
-
-        print quote_list
-
-        for quote in quote_list:
+    # def test_create_list(self):
+    #     print("Expect to pass in object with __ properties and return list of tuples")        
 
 
     # def tearDown(self):
