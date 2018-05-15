@@ -1,6 +1,7 @@
 import mysqlConnect
 
-RAW = 'demo-quote.txt'
+# RAW = 'demo-quote.txt'
+RAW = 'testdata1b.txt'
 
 HOST = 'localhost'
 USER = 'root'
@@ -9,7 +10,7 @@ DB = 'OLB_Reports'
 
 MySQL_Quotes = mysqlConnect.MySQL_Quotes()
 File_Parser = mysqlConnect.File_Parser()
-DB_inject = mysqlConnect.DB_inject( HOST, USER, PASS, DB )
+# DB_inject = mysqlConnect.DB_inject( HOST, USER, PASS, DB )
 
 class Init():
 
@@ -17,6 +18,8 @@ class Init():
         self.data_dict = None
         self.quote_list = []
 
-    # local_list = MySQL_Quotes.create_list(RAW)
+    data_list = File_Parser.parse_file(RAW)
+    tuples = MySQL_Quotes.create_list(data_list)
+
     # DB_inject.db_inject(local_list, "a", "b")
-    print DB_inject
+    print tuples

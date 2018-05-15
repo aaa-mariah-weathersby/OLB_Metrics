@@ -1,4 +1,4 @@
-import MySQLdb
+# import MySQLdb
 import json
 
 # MOCK_QUOTE_DB_ROW = ('quote_id', 'created_date', 'type')
@@ -18,6 +18,7 @@ class File_Parser():
             data_dict = json.load(f)
 
         dict_root = data_dict['Quotes']
+        print dict_root
         return dict_root
 
 
@@ -27,42 +28,42 @@ class MySQL_Quotes():
     #     self.quote_list = []
     
     @staticmethod
-    def create_list(quotePath):
-        data_dict = None
+    def create_list( list ):
+
         quote_list = []
 
-        print quotePath
+        for quote in list:
 
-        with open(quotePath, 'r') as f:
-            data_dict = json.load(f)
+            quote_id, quote_date, quote_type, quote_premium = "Unknown", "Unknown", "Unknown", "0"
+            keys = quote.keys()
 
-        dict_root = data_dict['Quotes']
+            if 'QuoteId' in keys:
+                quote_id = quote['QuoteId']
 
-        for quote in dict_root:
-            print quote
-            quote_id = quote['QuoteId']
-            quote_date = quote['EffectiveDate']
-            quote_type = "Gold"
+            if 'EffectiveDate' in keys:
+                quote_date = quote['EffectiveDate']                                
             
-            if 'Messages' in quote.keys():
+            if 'Messages' in keys and len(quote['Messages']) > 0:
                 quote_type = quote['Messages'][0]["Type"]
 
-            quote_tup = (quote_id, quote_date, quote_type)
+            if 'AnnualPremium' in keys:
+                quote_premium = "1"                
+
+            quote_tup = (quote_id, quote_date, quote_type, quote_premium)
             quote_list.append(quote_tup)
 
-        print quote_list
         return quote_list
 
 
 class DB_inject(): 
-    def __init__(host, user, passwd, db):
-        self.db_conn = MySQLdb.connect(host= host,
-                        user=user,
-                        passwd=passwd,
-                        db=db)
+    # def __init__(host, user, passwd, db):
+    #     self.db_conn = MySQLdb.connect(host= host,
+    #                     user=user,
+    #                     passwd=passwd,
+    #                     db=db)
 
-    @staticmethod
-    def db_inject(quote_list, db, db_table):
+    # @staticmethod
+    # def db_inject(quote_list, db, db_table):
 
         # conn = MySQLdb.connect(host= "localhost",
         #                 user="root",

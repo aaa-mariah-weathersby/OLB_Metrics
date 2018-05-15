@@ -38,10 +38,61 @@ class MySQLDataInjection(unittest.TestCase):
         self.assertEqual(expected_data_type, returned_data_type)
 
 
-    # def test_create_list_gold(self):
-        # print("Expect to pass in object with __ properties and return list of tuples")
-        # expectedData = [('000000000999501123', '11/04/2016', 'Gold')]
-        # self.assertEqual(MySQL_Quotes.create_list(MOCK_DATA), expectedData)
+    def test_create_list(self):
+        print("Expect to pass in list of quote objects and return formatted list of tuples")
+        
+        sample_data = [
+            [{
+                "QuoteId": "000000000999501123",
+                "EffectiveDate": "11/04/2016",
+            }],
+            [{
+                "QuoteId": "000000000999501123",
+                "EffectiveDate": "11/04/2016",
+                "Messages": [{"Type" : "KO"}]
+            }],
+            [{
+                "QuoteId": "000000000999501123",
+                "EffectiveDate": "11/04/2016",
+                "Messages": [{"Type" : "KO"}],
+                "AnnualPremium": "$445"
+            }],
+            [{
+                "EffectiveDate": "11/04/2016",
+                "Messages": [{"Type" : "KO"}],
+                "AnnualPremium": "$445"
+            }],
+            [{
+                "QuoteId": "000000000999501123",
+                "Messages": [{"Type" : "KO"}],
+                "AnnualPremium": "$445"
+            }],
+            [{
+                # no required keys are found in object list
+            }],
+            
+
+        ]
+
+        
+        expectedData = [('000000000999501123', '11/04/2016', 'Unknown', '0')]
+        self.assertEqual(MySQL_Quotes.create_list(sample_data[0]), expectedData)
+
+        expectedData = [('000000000999501123', '11/04/2016', 'KO', '0')]
+        self.assertEqual(MySQL_Quotes.create_list(sample_data[1]), expectedData)
+
+        expectedData = [('000000000999501123', '11/04/2016', 'KO', '1')]
+        self.assertEqual(MySQL_Quotes.create_list(sample_data[2]), expectedData)
+
+        expectedData = [('Unknown', '11/04/2016', 'KO', '1')]
+        self.assertEqual(MySQL_Quotes.create_list(sample_data[3]), expectedData)
+        
+        expectedData = [('000000000999501123', 'Unknown', 'KO', '1')]
+        self.assertEqual(MySQL_Quotes.create_list(sample_data[4]), expectedData)
+
+        expectedData = [('Unknown', 'Unknown', 'Unknown', '0')]
+        self.assertEqual(MySQL_Quotes.create_list(sample_data[5]), expectedData)
+
 
 
     # def test_create_list(self):
