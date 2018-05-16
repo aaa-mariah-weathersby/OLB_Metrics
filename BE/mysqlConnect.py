@@ -89,8 +89,42 @@ class DB_inject():
 
     #tuple list insert in mysqlDB quotes [quoteid, date created, type]
 
-# class MySQL_QNB():
-        # print "quote_list"
+class MySQL_QNB():
+
+    @staticmethod
+    def create_list( list ):
+
+        qnb_list = []
+
+        for quote in list:
+            qnb_message_list = []
+            isValid = 0
+
+            quote_id, qnb_messages = "", []
+            keys = quote.keys()
+
+            if 'QuoteId' in keys:
+                quote_id = quote['QuoteId']
+                isValid = 1
+            
+            if 'Messages' in keys and len(quote['Messages']) > 0:
+                qnb_message_list = []
+                for msg in quote['Messages']:
+                    messageText = msg['MessageText']
+                    mType = msg['Type']
+                    if mType == 'QuoteNotBind':
+                        qnb_message_list.append(messageText)
+            
+            if isValid == 1 and len(qnb_message_list) > 0:
+                qnb_tup = (quote_id, qnb_message_list)
+                qnb_list.append(qnb_tup)
+        
+        return qnb_list 
+
+            
+
+
+
 
     #tuple list insert in mysqlDB quote_not_bind [quoteid, rules_list]
 

@@ -10,6 +10,7 @@ DB = 'OLB_Reports'
 
 MySQL_Quotes = mysqlConnect.MySQL_Quotes()
 File_Parser = mysqlConnect.File_Parser()
+MySQL_QNB = mysqlConnect.MySQL_QNB()
 # DB_inject = mysqlConnect.DB_inject( HOST, USER, PASS, DB )
 
 class Init():
@@ -17,9 +18,13 @@ class Init():
     def __init__():
         self.data_dict = None
         self.quote_list = []
+        self.qnb_list = []
 
     data_list = File_Parser.parse_file(RAW)
     tuples = MySQL_Quotes.create_list(data_list)
+    tuples2 = MySQL_QNB.create_list(data_list)
+
 
     # DB_inject.db_inject(local_list, "a", "b")
-    print tuples
+    # print tuples
+    print tuples2

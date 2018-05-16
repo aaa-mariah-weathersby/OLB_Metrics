@@ -11,6 +11,7 @@ MOCK_QUOTE = open('demo-quote.txt', 'r')
 
 MySQL_Quotes = mysqlConnect.MySQL_Quotes()
 File_Parser = mysqlConnect.File_Parser()
+MySQL_QNB = mysqlConnect.MySQL_QNB()
 
 MOCK_DATA = 'test-data.txt'
 
@@ -38,7 +39,7 @@ class MySQLDataInjection(unittest.TestCase):
         self.assertEqual(expected_data_type, returned_data_type)
 
 
-    def test_create_list(self):
+    def test_MySQL_quotes_create_list(self):
         print("Expect to pass in list of quote objects and return formatted list of tuples")
         
         sample_data = [
@@ -94,6 +95,58 @@ class MySQLDataInjection(unittest.TestCase):
         self.assertEqual(MySQL_Quotes.create_list(sample_data[5]), expectedData)
 
 
+    def test_MySQL_QNB_create_list(self):
+        print("Expect to pass in list of quote objects and return only QuoteId and MessageText if message type is QNB")
+        
+        sample_data = [
+            [{
+
+            }],
+            [{
+                "QuoteId": "000000000999501123",
+                "Messages": [
+                    {
+                        "MessageText": "VSR > 27", 
+                        "Type" : "KO"
+                    }
+                ]
+            }],
+            [{
+                "Messages": [{"MessageText": "VSR > 27", 
+                            "Type" : "KO"}]
+            }],
+            [{
+                "QuoteId": "000000000999501123",
+                "Messages": [
+                    {
+                        "MessageText": "HighRiskVehicle BENT", 
+                        "Type" : "QuoteNotBind"
+                    },
+                    {
+                        "MessageText": "VSR > 27", 
+                        "Type" : "KO"
+                    },
+                    {
+                        "MessageText": "No coverage history found for policyholder", 
+                        "Type" : "QuoteNotBind"
+                    },
+                ]
+            }]
+         ]
+
+        
+        expectedData = []
+        self.assertEqual(MySQL_QNB.create_list(sample_data[0]), expectedData)
+
+        expectedData = []
+        print(MySQL_QNB.create_list(sample_data[1]))
+        self.assertEqual(MySQL_QNB.create_list(sample_data[1]), expectedData)
+
+        expectedData = []
+        self.assertEqual(MySQL_QNB.create_list(sample_data[2]), expectedData)
+
+        expectedData = [('000000000999501123', ["HighRiskVehicle BENT", "No coverage history found for policyholder"])]
+        self.assertEqual(MySQL_QNB.create_list(sample_data[3]), expectedData)
 
     # def test_create_list(self):
     #     print("Expect to pass in object with __ properties and return list of tuples")        
