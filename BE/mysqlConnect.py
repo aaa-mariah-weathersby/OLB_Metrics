@@ -1,8 +1,5 @@
-# import MySQLdb
+import MySQLdb
 import json
-
-# MOCK_QUOTE_DB_ROW = ('quote_id', 'created_date', 'type')
-
 
 
 class File_Parser():
@@ -30,63 +27,36 @@ class MySQL_Quotes():
     def create_list( list ):
 
         quote_list = []
+        counter = 0
 
         for quote in list:
 
-            quote_id, quote_date, quote_type, quote_premium = "Unknown", "Unknown", "Unknown", "0"
+            quote_id, quote_date, quote_type, quote_premium = "\"Other\"", "\"Unknown\"", "\"Bound\"", "0"
             keys = quote.keys()
 
             if 'QuoteId' in keys:
-                quote_id = quote['QuoteId']
+                quote_id = str(quote['QuoteId'])
+
+            else:
+                quote_id = "\"Other%s\"" %(str(counter))
+                counter+=1
 
             if 'EffectiveDate' in keys:
-                quote_date = quote['EffectiveDate']                                
+                quote_date = quote['EffectiveDate']
+                modified_date = quote_date.replace("/", "")
             
             if 'Messages' in keys and len(quote['Messages']) > 0:
                 quote_type = quote['Messages'][0]["Type"]
+                quote_type = '"' + quote_type + '"'
 
             if 'AnnualPremium' in keys:
                 quote_premium = "1"                
 
-            quote_tup = (quote_id, quote_date, quote_type, quote_premium)
+            quote_tup = (quote_id, modified_date, quote_type, quote_premium)
             quote_list.append(quote_tup)
 
         return quote_list
 
-
-class DB_inject(): 
-    # def __init__(host, user, passwd, db):
-    #     self.db_conn = MySQLdb.connect(host= host,
-    #                     user=user,
-    #                     passwd=passwd,
-    #                     db=db)
-
-    # @staticmethod
-    # def db_inject(quote_list, db, db_table):
-
-        # conn = MySQLdb.connect(host= "localhost",
-        #                 user="root",
-        #                 passwd="Autoclub.1!",
-        #                 db=db)
-        # x = conn.cursor()
-
-        #Check to see if DB has exsistin table
-
-            # drop table
-
-            #create table
-
-        #inject data into table
-
-        sql_command = """INSERT INTO %s VALUES (%s, %s)""" %("a", "b", "c")
-        print sql_command
-
-        # x.execute("""SELECT * FROM quotes""")
-        # data = x.fetchall()
-
-
-
-    #tuple list insert in mysqlDB quotes [quoteid, date created, type]
 
 class MySQL_QNB():
 
@@ -116,15 +86,51 @@ class MySQL_QNB():
                     mType = message['Type']
                     
                     if mType == 'QuoteNotBind':
-                        qnb_tup = (quote_id, qnb_message)
+                        qnb_tup = (quote_id, '"' + qnb_message + '"')
                         qnb_list.append(qnb_tup)
 
         return qnb_list 
 
-            
 
+class DB_inject(): 
+    # def __init__(host, user, passwd, db):
+    #     self.db_conn = MySQLdb.connect(host= host,
+    #                     user=user,
+    #                     passwd=passwd,
+    #                     db=db)
 
+    @staticmethod
+    def db_inject(quote_list, db, db_table, table_conditions):
 
+        conn = MySQLdb.connect(host= "localhost",
+                        user="root",
+                        passwd="Autoclub.1!",
+                        db=db)
+        x = conn.cursor()
 
-    #tuple list insert in mysqlDB quote_not_bind [quoteid, rules_list]
+        check_table_command = "CREATE TABLE IF NOT EXISTS %s (%s)" %(db_table, table_conditions)
+        x.execute(check_table_command)
+        
+        clear_table_command = "TRUNCATE TABLE %s" %(db_table)
+        x.execute(clear_table_command)
+
+        sql_command_base = "INSERT INTO %s VALUES" %(db_table)
+
+        for index, quote in enumerate(quote_list):
+            quote_stuff = str(quote_list[index])
+            sql_string = "("
+
+            for data in quote_list[index]:
+                sql_string = sql_string + data + ","
+
+            sql_string = sql_string[:-1]
+            sql_string = sql_string + ")"
+
+            # sql_command = "INSERT INTO %s VALUES (%s,%s,%s,%s)" %(db_table, quote_list[index][0], quote_list[index][1], quote_list[index][2], quote_list[index][3])
+            sql_command = "INSERT INTO %s VALUES %s" %(db_table, sql_string)
+            print sql_command
+
+            x.execute(sql_command)
+            conn.commit()
+
 
