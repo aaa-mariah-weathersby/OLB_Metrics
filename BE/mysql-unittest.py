@@ -139,13 +139,12 @@ class MySQLDataInjection(unittest.TestCase):
         self.assertEqual(MySQL_QNB.create_list(sample_data[0]), expectedData)
 
         expectedData = []
-        print(MySQL_QNB.create_list(sample_data[1]))
         self.assertEqual(MySQL_QNB.create_list(sample_data[1]), expectedData)
 
         expectedData = []
         self.assertEqual(MySQL_QNB.create_list(sample_data[2]), expectedData)
 
-        expectedData = [('000000000999501123', ["HighRiskVehicle BENT", "No coverage history found for policyholder"])]
+        expectedData = [('000000000999501123', "HighRiskVehicle BENT"), ('000000000999501123', "No coverage history found for policyholder")]
         self.assertEqual(MySQL_QNB.create_list(sample_data[3]), expectedData)
 
     # def test_create_list(self):
@@ -158,3 +157,21 @@ class MySQLDataInjection(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+            # [{
+            #     "QuoteId": "000000000999501123",
+            #     "Messages": [
+            #         {
+            #             "MessageText": "HighRiskVehicle BENT", 
+            #             "Type" : "QuoteNotBind"
+            #         },
+            #         {
+            #             "MessageText": "VSR > 27", 
+            #             "Type" : "KO"
+            #         },
+            #         {
+            #             "MessageText": "No coverage history found for policyholder", 
+            #             "Type" : "QuoteNotBind"
+            #         },
+            #     ]
+            # }]

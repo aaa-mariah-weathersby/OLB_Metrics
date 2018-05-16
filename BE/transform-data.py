@@ -27,4 +27,3 @@ class Init():
 
     # DB_inject.db_inject(local_list, "a", "b")
     # print tuples
-    print tuples2

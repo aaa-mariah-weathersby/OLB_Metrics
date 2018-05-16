@@ -18,7 +18,6 @@ class File_Parser():
             data_dict = json.load(f)
 
         dict_root = data_dict['Quotes']
-        print dict_root
         return dict_root
 
 
@@ -95,30 +94,31 @@ class MySQL_QNB():
     def create_list( list ):
 
         qnb_list = []
+        counter = 0
 
         for quote in list:
-            qnb_message_list = []
-            isValid = 0
+            # qnb_message_list = []
 
-            quote_id, qnb_messages = "", []
+            quote_id, qnb_message = "", []
             keys = quote.keys()
 
             if 'QuoteId' in keys:
                 quote_id = quote['QuoteId']
-                isValid = 1
-            
+
+            else:
+                quote_id = "Unknown" + str(counter)
+                counter+=1
+
+
             if 'Messages' in keys and len(quote['Messages']) > 0:
-                qnb_message_list = []
-                for msg in quote['Messages']:
-                    messageText = msg['MessageText']
-                    mType = msg['Type']
+                for message in quote['Messages']:
+                    qnb_message = message['MessageText']
+                    mType = message['Type']
+                    
                     if mType == 'QuoteNotBind':
-                        qnb_message_list.append(messageText)
-            
-            if isValid == 1 and len(qnb_message_list) > 0:
-                qnb_tup = (quote_id, qnb_message_list)
-                qnb_list.append(qnb_tup)
-        
+                        qnb_tup = (quote_id, qnb_message)
+                        qnb_list.append(qnb_tup)
+
         return qnb_list 
 
             
