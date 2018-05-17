@@ -1,0 +1,47 @@
+Rule name,Show text
+QNB.Additional.15YearOldRatedDriver,Rated Drier is 15 years old
+QNB.Additional.AdmittedViolationOrLoss,Prospect has admitted at least 1 violation within the exerience period
+QNB.Additional.ExcludedDriverSpouse,Spouse is an excluded driver
+QNB.Additional.MarriedButNoSpouseDetails,Married but no spouse details provided
+QNB.Additional.OtherRegisteredOwner,Registered owner of vehicle is Other
+QNB.Additional.Ridesharing,Vehicle is used for Rideshaaring
+QNB.Additional.TexarkanaZipCode,Texarkana Zip Code
+QNB.Additional.VehicleParkedOutsideResidency,Vehicle not parked in the same zip code as Home Address
+QNB.CIS.AllDriversWithNoCIS,No CIS
+QNB.CIS.LowCISAndInadequateDrivingHistory,Low CIS with less than 3 years driving history
+QNB.CIS.LowCISAndLessThan6MonthsPriorInsurance,Driver has a low CIS and has less than 6 months of prior insurance in the most recent 12 months
+QNB.DCS.DCSReferenceError,DCS ordered but response was Error
+QNB.DCS.DCSReportedOffenses,DCS Activity
+HighRiskVehicles,High Risk Vehicle
+QNB.MVR.LicenseIssueDateIsBeforeFirstYearLicense,Current License Year is less than Year First License
+QNB.MVR.LicenseIssueDateLessThan3Years,Current License is less than 3 years old
+QNB.MVR.MVR_Mismatch_LN_or_DB,MVR Mismatch on LN/DB
+QNB.MVR.MVRNoHit,MVR no hit
+QNB.MVR.MVRReferenceError,MVR Ordered but response was Error
+QNB.MVR.MVRReportedViolationsWithActiveStatus,MVR Activity
+QNB.MVR.MVRReportedWithNoNActiveStatus,MVR Report Not in Active Status
+QNB.Membership.MemberActiveAutoPolicyExpiryDate,Membership has active Policy based on expiry date
+QNB.Membership.MemberInfoNotMatchingForMembershipNumber,Member info not matching membership card number
+QNB.Membership.MemberNotPrimaryOrAdultAssociate,Member is not primary or an adult associate
+QNB.Membership.MembershipExpired,Membership found but expired
+QNB.Membership.MembershipHasActiveAutoPolicy,Membership has an active auto policy
+QNB.Membership.MembershipMatchButNonTexasMember,Membership Matched but non Texas member
+QNB.Membership.MembershipMisconduct,Membership misconduct
+QNB.NoCategory.ActiveExchangePolicyForTX,Active Exchange Policy
+QNB.NoCategory.AutocheckFailedOrNoData,Autocheck Failed or No data has been returned
+QNB.NoCategory.BodilyInjury,Bodily Injury > $500K
+QNB.NoCategory.DefaultsForAtFault,Driver found at fault in loss
+QNB.NoCategory.HouseholdsWithIncidents,Households with incidents during the experience period
+QNB.NoCategory.LessThan6MonthsPriorLiability,Driver has less than 6 months of prior insurance in the most recent 12 months
+QNB.NoCategory.NumberofDrivers,More than 4 drivers
+QNB.NoCategory.OnlySalvageVehicle,All vehicle in quote have salvage title
+QNB.NoCategory.SalvageVehiclesInQuote,Salvage Vehicle in quote
+QNB.NoCategory.ValidDriverLicense,Driver must have a valid US license
+QNB.NoCategory.VSROver27,VSR > 27
+QNB.NoCategory.LossAtFaultAndAmount,At fault on Loss by high amount
+QNB.PriorInsurance.BadVeriskDataTX,Verisk Data cannot be processed
+QNB.PriorInsurance.NoVeriskForTX,No coverage history found for policyholder
+QNB.PriorInsurance.BestOfPriorInsuranceMonthsTX,Best Prior insurance months validation failed
+QNB.PriorInsurance.BestOfPriorInsuranceYearsForTx,Best Prior insurance years validation failed
+QNB.UnaceptableVehicles.FiatBefore2012,Unacceptable Vehicle: Fiat prior 2012
+QNB.UnaceptableVehicles.Makes,Unacceptable vehicle maker
