@@ -1,6 +1,7 @@
 import MySQLdb
 import datetime
 import json
+import csv
 
 
 class FileParser():
@@ -12,15 +13,36 @@ class FileParser():
     def parse(quotePath):
         data_dict = None
 
-        with open(quotePath, 'r') as f:
-            data_dict = json.load(f)
+        with open(quotePath, 'r') as infile:
+            data_dict = json.load(infile)
 
         dict_root = data_dict['Quotes']
         return dict_root
 
+    @staticmethod
+    def csv_parse(csvPath):
+        data_dict = None
 
-# class SQLStringParer():
+        with open(csvPath, 'r') as infile:
+            reader = csv.reader(infile)
+            dict_root = dict((str(rows[0]), str(rows[1])) for rows in reader)
 
+        print dict_root.keys()
+        print type(dict_root)
+        return dict_root
+
+class SQLStringParser():
+
+    @staticmethod
+    def wrap_quotes(list):
+        formatted_list = []
+
+        for index, string in enumerate(list):
+            formatted_string = "'{}'".format(string)
+            formatted_list.append(formatted_string)
+        
+        return tuple(formatted_list)
+        
 
 class QuotesData():
     # def __init__():
@@ -35,28 +57,28 @@ class QuotesData():
 
         for quote in list:
 
-            quote_id, quote_date, quote_type, quote_premium = "\"Other\"", "\"Unknown\"", "\"Bound\"", "0"
+            quote_id, formatted_date, quote_type, quote_premium = "Other", "Unknown", "Unknown", "0"
             keys = quote.keys()
 
             if 'QuoteId' in keys:
                 quote_id = str(quote['QuoteId'])
 
             else:
-                quote_id = "\"Other%s\"" %(str(counter))
+                quote_id = "Other%s" %(str(counter))
                 counter+=1
 
             if 'EffectiveDate' in keys:
                 quote_date = quote['EffectiveDate']
-                formatted_date = "'" + datetime.datetime.strptime(quote_date, "%m/%d/%Y").strftime("%Y-%m-%d") + "'"
+                formatted_date = datetime.datetime.strptime(quote_date, "%m/%d/%Y").strftime("%Y-%m-%d")
             
             if 'Messages' in keys and len(quote['Messages']) > 0:
                 quote_type = quote['Messages'][0]["Type"]
-                quote_type = '"' + quote_type + '"'
 
             if 'AnnualPremium' in keys:
                 quote_premium = "1"                
 
             quote_tup = (quote_id, formatted_date, quote_type, quote_premium)
+            quote_tup = SQLStringParser.wrap_quotes(quote_tup)
             quote_list.append(quote_tup)
 
         return quote_list
@@ -65,14 +87,15 @@ class QuotesData():
 class QNBData():
 
     @staticmethod
-    def create_list( list ):
+    def create_list( list, map = [] ):
 
         qnb_list = []
         counter = 0
 
-        for quote in list:
-            # qnb_message_list = []
+        if len(map) > 0:
+            map_keys = map.keys()
 
+        for quote in list:            
             quote_id, qnb_message = "", []
             keys = quote.keys()
 
@@ -83,15 +106,23 @@ class QNBData():
                 quote_id = "Unknown" + str(counter)
                 counter+=1
 
-
             if 'Messages' in keys and len(quote['Messages']) > 0:
-                for message in quote['Messages']:
-                    messageText = message['MessageText']
-                    messageType = message['Type']
-                    
-                    if messageType == 'QuoteNotBind':
-                        qnb_tup = (quote_id, '"' + messageText + '"')
+
+                for message_obj in quote['Messages']:
+                    mapped_rule = message_obj['MessageText']
+                    message_obj_keys = message_obj.keys()
+
+                    if 'RuleName' in message_obj_keys:
+                        message_rule = message_obj["RuleName"] 
+
+                        if map_keys:
+                            if message_rule in map_keys:
+                                mapped_rule = map[message_rule]                        
+
+                    if message_obj['Type'] == 'QuoteNotBind':
+                        qnb_tup = (quote_id, '"' + mapped_rule + '"')
                         qnb_list.append(qnb_tup)
+
 
         return qnb_list 
 
