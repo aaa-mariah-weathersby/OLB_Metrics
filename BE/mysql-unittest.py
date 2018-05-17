@@ -9,9 +9,9 @@ MOCK_QUOTE_DB_ROW = ('quote_id', 'created_date', 'type')
 MOCK_INPUT_DATA = open('mock_formatted_data.txt')
 MOCK_QUOTE = open('demo-quote.txt', 'r')
 
-MySQL_Quotes = mysqlConnect.MySQL_Quotes()
-File_Parser = mysqlConnect.File_Parser()
-MySQL_QNB = mysqlConnect.MySQL_QNB()
+QuotesTable = mysqlConnect.QuotesData()
+FileParser = mysqlConnect.FileParser()
+QNBTable = mysqlConnect.QNBData()
 
 MOCK_DATA = 'test-data.txt'
 

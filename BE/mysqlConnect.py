@@ -1,14 +1,15 @@
 import MySQLdb
+import datetime
 import json
 
 
-class File_Parser():
+class FileParser():
     # def __init__():
     #     self.data_dict = None
     #     self.quote_list = []
     
     @staticmethod
-    def parse_file(quotePath):
+    def parse(quotePath):
         data_dict = None
 
         with open(quotePath, 'r') as f:
@@ -18,7 +19,10 @@ class File_Parser():
         return dict_root
 
 
-class MySQL_Quotes():
+# class SQLStringParer():
+
+
+class QuotesData():
     # def __init__():
     #     self.data_dict = None
     #     self.quote_list = []
@@ -43,7 +47,7 @@ class MySQL_Quotes():
 
             if 'EffectiveDate' in keys:
                 quote_date = quote['EffectiveDate']
-                modified_date = quote_date.replace("/", "")
+                formatted_date = "'" + datetime.datetime.strptime(quote_date, "%m/%d/%Y").strftime("%Y-%m-%d") + "'"
             
             if 'Messages' in keys and len(quote['Messages']) > 0:
                 quote_type = quote['Messages'][0]["Type"]
@@ -52,13 +56,13 @@ class MySQL_Quotes():
             if 'AnnualPremium' in keys:
                 quote_premium = "1"                
 
-            quote_tup = (quote_id, modified_date, quote_type, quote_premium)
+            quote_tup = (quote_id, formatted_date, quote_type, quote_premium)
             quote_list.append(quote_tup)
 
         return quote_list
 
 
-class MySQL_QNB():
+class QNBData():
 
     @staticmethod
     def create_list( list ):
@@ -82,17 +86,17 @@ class MySQL_QNB():
 
             if 'Messages' in keys and len(quote['Messages']) > 0:
                 for message in quote['Messages']:
-                    qnb_message = message['MessageText']
-                    mType = message['Type']
+                    messageText = message['MessageText']
+                    messageType = message['Type']
                     
-                    if mType == 'QuoteNotBind':
-                        qnb_tup = (quote_id, '"' + qnb_message + '"')
+                    if messageType == 'QuoteNotBind':
+                        qnb_tup = (quote_id, '"' + messageText + '"')
                         qnb_list.append(qnb_tup)
 
         return qnb_list 
 
 
-class DB_inject(): 
+class DB_Inject(): 
     # def __init__(host, user, passwd, db):
     #     self.db_conn = MySQLdb.connect(host= host,
     #                     user=user,
@@ -100,7 +104,7 @@ class DB_inject():
     #                     db=db)
 
     @staticmethod
-    def db_inject(quote_list, db, db_table, table_conditions):
+    def inject(quote_list, db, db_table, table_conditions):
 
         conn = MySQLdb.connect(host= "localhost",
                         user="root",
@@ -114,10 +118,9 @@ class DB_inject():
         clear_table_command = "TRUNCATE TABLE %s" %(db_table)
         x.execute(clear_table_command)
 
-        sql_command_base = "INSERT INTO %s VALUES" %(db_table)
+        insert_table_base = "INSERT INTO %s VALUES" %(db_table)
 
         for index, quote in enumerate(quote_list):
-            quote_stuff = str(quote_list[index])
             sql_string = "("
 
             for data in quote_list[index]:
@@ -126,11 +129,10 @@ class DB_inject():
             sql_string = sql_string[:-1]
             sql_string = sql_string + ")"
 
-            # sql_command = "INSERT INTO %s VALUES (%s,%s,%s,%s)" %(db_table, quote_list[index][0], quote_list[index][1], quote_list[index][2], quote_list[index][3])
-            sql_command = "INSERT INTO %s VALUES %s" %(db_table, sql_string)
-            print sql_command
+            insert_value_command = "INSERT INTO %s VALUES %s" %(db_table, sql_string)
+            print insert_value_command
 
-            x.execute(sql_command)
+            x.execute(insert_value_command)
             conn.commit()
 
 
