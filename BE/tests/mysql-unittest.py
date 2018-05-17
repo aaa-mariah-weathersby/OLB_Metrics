@@ -42,6 +42,16 @@ class MySQLDataInjection(unittest.TestCase):
 
         self.assertEqual(expected_data_type, returned_data_type)
 
+    def test_string_formatter(self):
+        print("Wrap string in quotes")
+        print("\n")        
+
+        expected_data = ["\'" + "testing" + "\'"]
+        expected_data = tuple(expected_data)
+        sample_data = ["testing"]
+        
+        self.assertEqual(string_parser.wrap_quotes(sample_data), expected_data)
+
 
     def test_MySQL_quotes_create_list(self):
         print("Expect to pass in list of quote objects and return formatted list of tuples")
