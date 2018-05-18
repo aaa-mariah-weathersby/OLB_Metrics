@@ -76,6 +76,6 @@ def createmassagedfile(data):
     
 
 if __name__ == '__main__':
-    data = processfile("transfertestApril.txt")
+    data = processfile("transfertest79.txt")
     createmassagedfile(data)
 
