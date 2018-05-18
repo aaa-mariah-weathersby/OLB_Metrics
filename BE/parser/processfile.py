@@ -17,7 +17,7 @@ def cleanup_quoteblob(quoteblob):
     * remove the first 2 bytes
     * remove any \x00 bytes
     """
-    if(len(quoteblob) == 0):
+    if(quoteblob == b'\x1a' or len(quoteblob) == 0):
         return ("")
     quoteblob = quoteblob.split(b'\x00\x00', 1)[1]
     quoteblob = quoteblob[2:]
