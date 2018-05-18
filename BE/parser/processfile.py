@@ -17,13 +17,12 @@ def cleanup_quoteblob(quoteblob):
     * remove the first 2 bytes
     * remove any \x00 bytes
     """
-
+    if(len(quoteblob) == 0):
+        return ("")
+    quoteblob = quoteblob.split(b'\x00\x00', 1)[1]
     quoteblob = quoteblob[2:]
     quoteblob = quoteblob.replace(b'\x00', b'')
-
-    index = quoteblob.find('{')
-    quoteblob = quoteblob[index:]
-    return quoteblob
+    return quoteblob.decode()
 
 def tso_encode_quoteid(quoteid):
     """tso encoding of quote id
@@ -60,11 +59,12 @@ def processfile(inputfilename):
     for indx, line in enumerate(lines):
 
         obj = cleanup_quoteblob(line)
-        if(indx != 0):
-            obj = ',' + obj
-        final_obj += obj
+        if (len(obj) != 0):
+            if(indx != 0):
+                obj = ',' + obj
+            final_obj += obj
    
-    final_obj = final_obj[:-1] + ']}'
+    final_obj = final_obj + ']}'
     inputfile.close()
 
     return final_obj
@@ -76,5 +76,6 @@ def createmassagedfile(data):
     
 
 if __name__ == '__main__':
-    data = processfile("transfertest79.txt")
+    data = processfile("transfertestApril.txt")
     createmassagedfile(data)
+
