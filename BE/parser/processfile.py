@@ -22,6 +22,8 @@ def cleanup_quoteblob(quoteblob):
     quoteblob = quoteblob.split(b'\x00\x00', 1)[1]
     quoteblob = quoteblob[2:]
     quoteblob = quoteblob.replace(b'\x00', b'')
+    if(len(quoteblob) >= 32743):
+        return('')
     return quoteblob.decode()
 
 def tso_encode_quoteid(quoteid):
