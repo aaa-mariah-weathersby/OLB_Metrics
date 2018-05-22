@@ -1,6 +1,6 @@
 """utility to process db2 dump of quotes
 
-currently hardcoded to process "transfertestApril.txt"
+currently hardcoded to process "transfertest79.txt"
 
 """
 
