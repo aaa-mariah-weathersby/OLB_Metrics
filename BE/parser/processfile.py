@@ -17,7 +17,7 @@ def cleanup_quoteblob(quoteblob):
     * remove the first 2 bytes
     * remove any \x00 bytes
     """
-    if(quoteblob == b'\x1a' or len(quoteblob) == 0):
+    if(quoteblob == b'\x1a'):
         return ("")
     quoteblob = quoteblob.split(b'\x00\x00', 1)[1]
     quoteblob = quoteblob[2:]
@@ -79,5 +79,6 @@ def createmassagedfile(data):
 
 if __name__ == '__main__':
     data = processfile("transfertest79.txt")
+    #data = processfile("transfertestApril.txt")
     createmassagedfile(data)
 
